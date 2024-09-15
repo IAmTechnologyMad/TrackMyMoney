@@ -33,30 +33,27 @@ balance_placeholder = st.empty()
 
 # Function to display balance with arrow
 def display_balance_with_arrow(balance, transactions):
-    try:
-        if not transactions.empty:
-            last_transaction_type = transactions['Type'].iloc[-1]
-            if last_transaction_type == 'Credit':
-                arrow = "&#x2191;"  # Up arrow
-                color = "green"
-            elif last_transaction_type == 'Debit':
-                arrow = "&#x2193;"  # Down arrow
-                color = "red"
-            else:
-                arrow = ""
-                color = "black"
+    if not transactions.empty:
+        last_transaction_type = transactions['Type'].iloc[-1]
+        if last_transaction_type == 'Credit':
+            arrow = "&#x2191;"  # Up arrow
+            color = "green"
+        elif last_transaction_type == 'Debit':
+            arrow = "&#x2193;"  # Down arrow
+            color = "red"
         else:
             arrow = ""
             color = "black"
-        
-        balance_placeholder.markdown(f"""
-        <h3 style='display: flex; align-items: center;'>
-            Current Balance: ₹{balance}
-            <span style='color: {color}; font-size: 30px; margin-left: 15px;'>{arrow}</span>
-        </h3>
-        """, unsafe_allow_html=True)
-    except Exception as e:
-        st.error(f"Error displaying balance: {e}")
+    else:
+        arrow = ""
+        color = "black"
+    
+    balance_placeholder.markdown(f"""
+    <h3 style='display: flex; align-items: center;'>
+        Current Balance: ₹{balance}
+        <span style='color: {color}; font-size: 30px; margin-left: 15px;'>{arrow}</span>
+    </h3>
+    """, unsafe_allow_html=True)
 
 # Display initial balance
 display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
@@ -76,27 +73,24 @@ custom_description = st.text_input("Enter custom description:") if description =
 
 # Function to add a new transaction and update balance
 def add_transaction(transaction_type, amount, description):
-    try:
-        if transaction_type == 'Credit':
-            st.session_state.balance += amount
-        elif transaction_type == 'Debit':
-            st.session_state.balance -= amount
-        
-        # Append transaction to history
-        new_transaction = pd.DataFrame({
-            'Type': [transaction_type],
-            'Amount': [amount],
-            'Description': [description if description != "Other" else custom_description],
-            'Balance After': [st.session_state.balance]
-        })
-        st.session_state.transactions = pd.concat([st.session_state.transactions, new_transaction], ignore_index=True)
-        # Save updated transactions to CSV
-        save_transactions(st.session_state.transactions)
+    if transaction_type == 'Credit':
+        st.session_state.balance += amount
+    elif transaction_type == 'Debit':
+        st.session_state.balance -= amount
+    
+    # Append transaction to history
+    new_transaction = pd.DataFrame({
+        'Type': [transaction_type],
+        'Amount': [amount],
+        'Description': [description if description != "Other" else custom_description],
+        'Balance After': [st.session_state.balance]
+    })
+    st.session_state.transactions = pd.concat([st.session_state.transactions, new_transaction], ignore_index=True)
+    # Save updated transactions to CSV
+    save_transactions(st.session_state.transactions)
 
-        # Update balance display
-        display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
-    except Exception as e:
-        st.error(f"Error adding transaction: {e}")
+    # Update balance display
+    display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
 
 # Create buttons for credit and debit transactions
 col1, col2 = st.columns(2)  # Two equal-width columns
