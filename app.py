@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+import time
 
 # File path for transaction history
 FILE_PATH = 'transactions.csv'
@@ -52,8 +53,18 @@ def display_balance_with_arrow(balance, transactions):
     </h3>
     """, unsafe_allow_html=True)
 
-# Display the current balance at the top
-display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
+# Create a placeholder for the balance display
+balance_placeholder = st.empty()
+
+# Function to update balance display
+def update_balance_display():
+    balance_placeholder.empty()  # Clear the placeholder
+    display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
+    time.sleep(2)  # Wait for 2 seconds
+    st.experimental_rerun()  # Rerun the app to refresh the display
+
+# Update the balance display periodically
+update_balance_display()
 
 # Section to add a new transaction
 st.header('Add Transaction')
@@ -102,7 +113,7 @@ with col2:
                 add_transaction('Credit', amount, description)
                 st.success(f"Credit of ₹{amount} for {description} successful!")
                 # Redraw balance with updated transaction
-                display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
+                update_balance_display()
             else:
                 st.error("Amount should be greater than 0!")
 
@@ -114,7 +125,7 @@ with col2:
                 add_transaction('Debit', amount, description)
                 st.success(f"Debit of ₹{amount} for {description} successful!")
                 # Redraw balance with updated transaction
-                display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
+                update_balance_display()
             else:
                 st.error("Amount should be greater than 0!")
 
