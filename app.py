@@ -90,7 +90,12 @@ def add_transaction(transaction_type, amount, description):
         'Description': [description if description != "Other" else custom_description],
         'Balance After': [st.session_state.balance]
     })
+    
+    # Reorder columns to put 'Date' before 'Type'
+    new_transaction = new_transaction[['Date', 'Type', 'Amount', 'Description', 'Balance After']]
+    
     st.session_state.transactions = pd.concat([st.session_state.transactions, new_transaction], ignore_index=True)
+    
     # Save updated transactions to CSV
     save_transactions(st.session_state.transactions)
 
