@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import os
-import time
 
 # File path for transaction history
 FILE_PATH = 'transactions.csv'
@@ -56,12 +55,8 @@ def display_balance_with_arrow(balance, transactions):
     </h3>
     """, unsafe_allow_html=True)
 
-# Function to update balance display
-def update_balance_display():
-    display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
-
-# Call the function to display initial balance
-update_balance_display()
+# Display initial balance
+display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
 
 # Section to add a new transaction
 st.header('Add Transaction')
@@ -98,7 +93,7 @@ def add_transaction(transaction_type, amount, description):
     save_transactions(st.session_state.transactions)
 
     # Update balance display
-    update_balance_display()
+    display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
 
 # Create a single column layout to center buttons side by side
 col1, col2, col3 = st.columns([1, 2, 1])  # Three columns with the middle one wider
@@ -128,9 +123,3 @@ with col2:
 # Display transaction history
 st.header('Transaction History')
 st.dataframe(st.session_state.transactions)
-
-# Ensure balance is updated periodically
-while True:
-    update_balance_display()
-    time.sleep(2)  # Wait for 2 seconds
-    st.experimental_rerun()  # Refresh the app to update the balance
