@@ -27,7 +27,7 @@ if 'transactions' not in st.session_state:
         st.session_state.balance = st.session_state.transactions['Balance After'].iloc[-1]
 
 # Title of the app with emoji
-st.title('Track My Money 💰')
+st.title('Track y Money 💰')
 
 # Custom CSS to style the buttons and center them
 st.markdown("""
