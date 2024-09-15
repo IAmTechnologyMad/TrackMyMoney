@@ -29,7 +29,10 @@ if 'transactions' not in st.session_state:
 # Title of the app with emoji
 st.title('Track My Money 💰')
 
-# Display current balance with arrows
+# Create a placeholder for the balance display
+balance_placeholder = st.empty()
+
+# Function to display balance with arrow
 def display_balance_with_arrow(balance, transactions):
     if not transactions.empty:
         last_transaction_type = transactions['Type'].iloc[-1]
@@ -53,20 +56,12 @@ def display_balance_with_arrow(balance, transactions):
     </h3>
     """, unsafe_allow_html=True)
 
-# Create a placeholder for the balance display
-balance_placeholder = st.empty()
-
 # Function to update balance display
 def update_balance_display():
     display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
-    time.sleep(2)  # Wait for 2 seconds
-    st.experimental_rerun()  # Rerun the app to refresh the display
 
-# Update the balance display periodically
-if 'update_balance' not in st.session_state:
-    st.session_state.update_balance = True
-    while st.session_state.update_balance:
-        update_balance_display()
+# Call the function to display initial balance
+update_balance_display()
 
 # Section to add a new transaction
 st.header('Add Transaction')
@@ -102,6 +97,9 @@ def add_transaction(transaction_type, amount, description):
     # Save updated transactions to CSV
     save_transactions(st.session_state.transactions)
 
+    # Update balance display
+    update_balance_display()
+
 # Create a single column layout to center buttons side by side
 col1, col2, col3 = st.columns([1, 2, 1])  # Three columns with the middle one wider
 
@@ -114,8 +112,6 @@ with col2:
             if amount > 0:
                 add_transaction('Credit', amount, description)
                 st.success(f"Credit of ₹{amount} for {description} successful!")
-                # Update balance display
-                update_balance_display()
             else:
                 st.error("Amount should be greater than 0!")
 
@@ -126,11 +122,15 @@ with col2:
             elif amount > 0:
                 add_transaction('Debit', amount, description)
                 st.success(f"Debit of ₹{amount} for {description} successful!")
-                # Update balance display
-                update_balance_display()
             else:
                 st.error("Amount should be greater than 0!")
 
 # Display transaction history
 st.header('Transaction History')
 st.dataframe(st.session_state.transactions)
+
+# Ensure balance is updated periodically
+while True:
+    update_balance_display()
+    time.sleep(2)  # Wait for 2 seconds
+    st.experimental_rerun()  # Refresh the app to update the balance
