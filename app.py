@@ -19,7 +19,7 @@ def save_transactions(transactions_df):
 
 # Initialize session state
 if 'balance' not in st.session_state:
-    st.session_state.balance = 13,245.93  # Initial balance (₹7,000)
+    st.session_state.balance = 13,245.93  
 
 if 'transactions' not in st.session_state:
     st.session_state.transactions = load_transactions()
