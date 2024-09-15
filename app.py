@@ -58,13 +58,16 @@ balance_placeholder = st.empty()
 
 # Function to update balance display
 def update_balance_display():
-    balance_placeholder.empty()  # Clear the placeholder
-    display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
-    time.sleep(2)  # Wait for 2 seconds
-    st.experimental_rerun()  # Rerun the app to refresh the display
+    while True:
+        balance_placeholder.empty()  # Clear the placeholder
+        display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
+        time.sleep(2)  # Wait for 2 seconds
+        # Manually trigger re-render by using a placeholder
 
-# Update the balance display periodically
-update_balance_display()
+# Start the balance update in the background
+if 'update_balance' not in st.session_state:
+    st.session_state.update_balance = True
+    update_balance_display()
 
 # Section to add a new transaction
 st.header('Add Transaction')
@@ -112,8 +115,8 @@ with col2:
             if amount > 0:
                 add_transaction('Credit', amount, description)
                 st.success(f"Credit of ₹{amount} for {description} successful!")
-                # Redraw balance with updated transaction
-                update_balance_display()
+                # Update balance display
+                display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
             else:
                 st.error("Amount should be greater than 0!")
 
@@ -124,8 +127,8 @@ with col2:
             elif amount > 0:
                 add_transaction('Debit', amount, description)
                 st.success(f"Debit of ₹{amount} for {description} successful!")
-                # Redraw balance with updated transaction
-                update_balance_display()
+                # Update balance display
+                display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
             else:
                 st.error("Amount should be greater than 0!")
 
