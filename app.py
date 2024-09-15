@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+from datetime import datetime
 
 # File path for transaction history
 FILE_PATH = 'transactions.csv'
@@ -10,7 +11,7 @@ def load_transactions():
     if os.path.exists(FILE_PATH):
         return pd.read_csv(FILE_PATH)
     else:
-        return pd.DataFrame(columns=['Type', 'Amount', 'Description', 'Balance After'])
+        return pd.DataFrame(columns=['Date', 'Type', 'Amount', 'Description', 'Balance After'])
 
 # Function to save transactions to a CSV file
 def save_transactions(transactions_df):
@@ -78,8 +79,12 @@ def add_transaction(transaction_type, amount, description):
     elif transaction_type == 'Debit':
         st.session_state.balance -= amount
     
+    # Get current date and time
+    current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
     # Append transaction to history
     new_transaction = pd.DataFrame({
+        'Date': [current_datetime],
         'Type': [transaction_type],
         'Amount': [amount],
         'Description': [description if description != "Other" else custom_description],
