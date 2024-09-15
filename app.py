@@ -29,7 +29,7 @@ if 'transactions' not in st.session_state:
 # Title of the app with emoji
 st.title('Track My Money 💰')
 
-# Custom CSS to center the buttons on both mobile and desktop
+# Custom CSS to style the buttons and center them
 st.markdown("""
     <style>
         .center-buttons {
@@ -40,6 +40,9 @@ st.markdown("""
         }
         .stButton button {
             width: 150px;
+        }
+        .stButton button.credit-button {
+            color: green !important;
         }
         @media (max-width: 768px) {
             .stButton button {
@@ -125,14 +128,15 @@ def add_transaction(transaction_type, amount, description):
 # Use the new CSS class to center the buttons side by side
 st.markdown('<div class="center-buttons">', unsafe_allow_html=True)
 
-# Display buttons side by side
-if st.button('Credit'):
+# Display "Credit" button with custom CSS class
+if st.button('Credit', key="credit", use_container_width=True):
     if amount > 0:
         add_transaction('Credit', amount, description)
         st.success(f"Credit of ₹{amount} for {description} successful!")
     else:
         st.error("Amount should be greater than 0!")
 
+# Display "Debit" button normally
 if st.button('Debit'):
     if amount > st.session_state.balance:
         st.error("Insufficient balance!")
