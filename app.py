@@ -27,7 +27,7 @@ if 'transactions' not in st.session_state:
         st.session_state.balance = st.session_state.transactions['Balance After'].iloc[-1]
 
 # Title of the app with emoji
-st.title('Track y Money 💰')
+st.title('Track My Money 💰')
 
 # Custom CSS to style the buttons and center them
 st.markdown("""
@@ -117,6 +117,7 @@ def add_transaction(transaction_type, amount, description):
     # Reorder columns to put 'Date' before 'Type'
     new_transaction = new_transaction[['Date', 'Type', 'Amount', 'Description', 'Balance After']]
     
+    # Update the transactions DataFrame
     st.session_state.transactions = pd.concat([st.session_state.transactions, new_transaction], ignore_index=True)
     
     # Save updated transactions to CSV
