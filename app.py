@@ -7,21 +7,14 @@ FILE_PATH = 'transactions.csv'
 
 # Function to load transactions from a CSV file
 def load_transactions():
-    try:
-        if os.path.exists(FILE_PATH):
-            return pd.read_csv(FILE_PATH)
-        else:
-            return pd.DataFrame(columns=['Type', 'Amount', 'Description', 'Balance After'])
-    except Exception as e:
-        st.error(f"Error loading transactions: {e}")
+    if os.path.exists(FILE_PATH):
+        return pd.read_csv(FILE_PATH)
+    else:
         return pd.DataFrame(columns=['Type', 'Amount', 'Description', 'Balance After'])
 
 # Function to save transactions to a CSV file
 def save_transactions(transactions_df):
-    try:
-        transactions_df.to_csv(FILE_PATH, index=False)
-    except Exception as e:
-        st.error(f"Error saving transactions: {e}")
+    transactions_df.to_csv(FILE_PATH, index=False)
 
 # Initialize session state
 if 'balance' not in st.session_state:
