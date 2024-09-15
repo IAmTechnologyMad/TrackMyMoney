@@ -29,21 +29,6 @@ if 'transactions' not in st.session_state:
 # Title of the app with emoji
 st.title('Track My Money 💰')
 
-# Custom CSS to center the buttons, including for mobile view
-st.markdown("""
-    <style>
-    .center-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
-    button[kind="primary"] {
-        width: 100px;
-        height: 50px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 # Create a placeholder for the balance display
 balance_placeholder = st.empty()
 
@@ -117,27 +102,30 @@ def add_transaction(transaction_type, amount, description):
     # Update balance display
     display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
 
-# Container for buttons
-st.markdown('<div class="center-buttons">', unsafe_allow_html=True)
+# Create columns to center the buttons and make them side by side
+col1, col2, col3 = st.columns([1, 2, 1])  # Two empty columns (col1, col3) for centering, middle column (col2) for buttons
 
-# Display buttons side by side
-if st.button('Credit'):
-    if amount > 0:
-        add_transaction('Credit', amount, description)
-        st.success(f"Credit of ₹{amount} for {description} successful!")
-    else:
-        st.error("Amount should be greater than 0!")
+with col2:  # Centered column
+    # Display buttons side by side
+    col_a, col_b = st.columns(2)
 
-if st.button('Debit'):
-    if amount > st.session_state.balance:
-        st.error("Insufficient balance!")
-    elif amount > 0:
-        add_transaction('Debit', amount, description)
-        st.success(f"Debit of ₹{amount} for {description} successful!")
-    else:
-        st.error("Amount should be greater than 0!")
+    with col_a:
+        if st.button('Credit'):
+            if amount > 0:
+                add_transaction('Credit', amount, description)
+                st.success(f"Credit of ₹{amount} for {description} successful!")
+            else:
+                st.error("Amount should be greater than 0!")
 
-st.markdown('</div>', unsafe_allow_html=True)
+    with col_b:
+        if st.button('Debit'):
+            if amount > st.session_state.balance:
+                st.error("Insufficient balance!")
+            elif amount > 0:
+                add_transaction('Debit', amount, description)
+                st.success(f"Debit of ₹{amount} for {description} successful!")
+            else:
+                st.error("Amount should be greater than 0!")
 
 # Display transaction history
 st.header('Transaction History')
