@@ -95,30 +95,26 @@ def add_transaction(transaction_type, amount, description):
     # Update balance display
     display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
 
-# Create a single column layout to center buttons side by side
-col1, col2, col3 = st.columns([1, 2, 1])  # Three columns with the middle one wider
+# Create buttons for credit and debit transactions
+col1, col2 = st.columns(2)  # Two equal-width columns
+
+with col1:
+    if st.button('Credit'):
+        if amount > 0:
+            add_transaction('Credit', amount, description)
+            st.success(f"Credit of ₹{amount} for {description} successful!")
+        else:
+            st.error("Amount should be greater than 0!")
 
 with col2:
-    # Place buttons in the center column
-    col1, col2 = st.columns(2)  # Two equal-width columns in the center column
-
-    with col1:
-        if st.button('Credit', key='credit'):
-            if amount > 0:
-                add_transaction('Credit', amount, description)
-                st.success(f"Credit of ₹{amount} for {description} successful!")
-            else:
-                st.error("Amount should be greater than 0!")
-
-    with col2:
-        if st.button('Debit', key='debit'):
-            if amount > st.session_state.balance:
-                st.error("Insufficient balance!")
-            elif amount > 0:
-                add_transaction('Debit', amount, description)
-                st.success(f"Debit of ₹{amount} for {description} successful!")
-            else:
-                st.error("Amount should be greater than 0!")
+    if st.button('Debit'):
+        if amount > st.session_state.balance:
+            st.error("Insufficient balance!")
+        elif amount > 0:
+            add_transaction('Debit', amount, description)
+            st.success(f"Debit of ₹{amount} for {description} successful!")
+        else:
+            st.error("Amount should be greater than 0!")
 
 # Display transaction history
 st.header('Transaction History')
