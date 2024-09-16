@@ -86,7 +86,7 @@ display_balance_with_arrow(st.session_state.balance, st.session_state.transactio
 st.header('Add Transaction')
 
 # Input for amount
-amount = st.number_input("Enter the amount:", min_value=0, step=100)
+amount = st.number_input("Enter the amount:", min_value=0, value=0, step=100)
 
 # Dropdown for description
 description_options = ["Groceries", "Fuel", "Medicine", "Other"]
