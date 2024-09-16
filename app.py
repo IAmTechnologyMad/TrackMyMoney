@@ -6,6 +6,8 @@ from datetime import datetime
 # File path for transaction history
 FILE_PATH = 'transactions.csv'
 
+st.title('Track My Money 💰')
+
 # Function to load transactions from a CSV file
 def load_transactions():
     if os.path.exists(FILE_PATH):
