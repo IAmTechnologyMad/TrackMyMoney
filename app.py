@@ -85,8 +85,14 @@ display_balance_with_arrow(st.session_state.balance, st.session_state.transactio
 # Section to add a new transaction
 st.header('Add Transaction')
 
-# Input for amount
-amount = st.number_input("Enter the amount:", min_value=0, step=100, value=None, format='%d')
+# Input for amount (blank input without + and - buttons)
+amount_input = st.text_input("Enter the amount:")
+
+# Validate the input to ensure it's numeric
+if amount_input and amount_input.isdigit():
+    amount = int(amount_input)
+else:
+    amount = 0  # Set amount to 0 if input is invalid or empty
 
 # Dropdown for description
 description_options = ["Groceries", "Fuel", "Medicine", "Other"]
