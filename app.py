@@ -257,7 +257,7 @@ else:
     amount = 0  # Set amount to 0 if input is invalid or empty
 
 # Dropdown for description
-description_options = ["Groceries", "Fuel", "Medicine", "Other"]
+description_options = ["Groceries", "Fuel", "Medicine", "Recharge", "Other"]
 description = st.selectbox("Select a description:", description_options)
 
 # Input for custom description if "Other" is selected
