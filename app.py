@@ -72,9 +72,12 @@ def display_balance_with_arrow(balance, transactions):
         arrow = ""
         color = "black"
     
+    # Format the balance with commas
+    formatted_balance = f"{balance:,.2f}"
+    
     balance_placeholder.markdown(f"""
     <h3 style='display: flex; align-items: center; justify-content: center;'>
-        Current Balance: ₹{balance:.2f}
+        Current Balance: ₹{formatted_balance}
         <span style='color: {color}; font-size: 30px; margin-left: 15px;'>{arrow}</span>
     </h3>
     """, unsafe_allow_html=True)
@@ -111,13 +114,16 @@ def add_transaction(transaction_type, amount, description):
     # Get current date and time
     current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
+    # Format the amount with commas
+    formatted_amount = f"{amount:,.2f}"
+    
     # Create a new transaction record
     new_transaction = pd.DataFrame({
         'Date': [current_datetime],
         'Type': [transaction_type],
-        'Amount': [amount],
+        'Amount': [formatted_amount],
         'Description': [description if description != "Other" else custom_description],
-        'Balance After': [st.session_state.balance]
+        'Balance After': [f"{st.session_state.balance:,.2f}"]
     })
     
     # Append the new transaction to the existing transactions
