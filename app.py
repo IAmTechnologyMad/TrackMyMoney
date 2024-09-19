@@ -19,7 +19,7 @@ def save_transactions(transactions_df):
 
 # Initialize session state
 if 'balance' not in st.session_state:
-    st.session_state.balance = 13245.93  # Updated initial balance (₹13,245.93)
+    st.session_state.balance = 7497.34  # Updated initial balance (₹7,497.34)
 
 if 'transactions' not in st.session_state:
     st.session_state.transactions = load_transactions()
@@ -136,11 +136,6 @@ if st.button('Credit', key='credit', help='Add a credit transaction'):
 if st.button('Debit', key='debit', help='Add a debit transaction'):
     add_transaction('Debit', amount, description)
 st.markdown('</div>', unsafe_allow_html=True)
-
-# Reset balance to initial value button
-if st.button('Reset Balance', help='Reset balance to the initial value of ₹13,245.93'):
-    st.session_state.balance = 7,497.34
-    display_balance_with_arrow(st.session_state.balance, st.session_state.transactions)
 
 # Display the transaction history
 st.header('Transaction History')
